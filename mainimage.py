@@ -30,12 +30,7 @@ engine = pyttsx3.init()
 engine.setProperty("rate", 150)
 
 app = Flask(__name__)
-
-
 embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
-
-max_workers = min(32, os.cpu_count() + 4)
-print(f"Default max_workers: {max_workers}")
 
 # Function to extract text and images
 def extract_text_images_from_pdf(pdf_path):
