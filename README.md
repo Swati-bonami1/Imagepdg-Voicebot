@@ -35,6 +35,10 @@ Performance Optimizations
 
 API Endpoints (Flask)
 
+
+mainimage.py= uses openai for all functions
+mainIVF.py= uses sentence transformer and embedding
+
 🔹 /upload → Uploads a PDF, processes it, and returns a new version with images replaced
 🔹 /ask → Takes voice input, finds relevant answers, and speaks the response
 
