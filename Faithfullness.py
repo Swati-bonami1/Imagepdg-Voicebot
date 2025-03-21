@@ -151,6 +151,25 @@ def ask_question():
         except sr.RequestError:
             return jsonify({"response": "Could not request results from Google Speech API."})
 
+def check_faithfulness(query, response, docs):
+    if not docs:
+        return {"faithfulness_score": 0, "message": "No documents retrieved!"}
+    retrieved_text = " ".join(docs)
+
+    # Compute embeddings
+    response_embedding = similarity_model.encode(response, convert_to_tensor=True)
+    retrieved_embedding = similarity_model.encode(retrieved_text, convert_to_tensor=True)
+
+    # Compute cosine similarity (range: 0-1, higher is better)
+    faithfulness_score = util.pytorch_cos_sim(response_embedding, retrieved_embedding).item()
+
+    return {
+        "faithfulness_score": round(faithfulness_score, 4),
+        "query": query,
+        "response": response,
+        "retrieved_docs": docs
+    }
+
 def evaluate_bert_score(response, retrieved_docs, model_type="bert-base-uncased"):
     if not retrieved_docs:
         return {"precision": 0, "recall": 0, "f1": 0, "message": "No retrieved documents!"}
